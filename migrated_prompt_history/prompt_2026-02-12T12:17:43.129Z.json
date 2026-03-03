@@ -1,0 +1,382 @@
+[
+  {
+    "id": 0,
+    "author": "user",
+    "payload": {
+      "type": "text",
+      "text": "I want to build a website similar to this website - https://www.srimandir.com/",
+      "files": [],
+      "fileUploads": [],
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770894635,
+      "nanos": 839000000
+    }
+  },
+  {
+    "id": 1,
+    "author": "model",
+    "payload": {
+      "type": "thinking",
+      "text": "**Analyzing Spiritual Platforms**\n\nI'm currently dissecting `srimandir.com`. It is a Hindu spiritual services platform with online pujas, astrology readings, offerings, and daily darshan. It focuses on deities, temples, and horoscopes, so I am taking those elements into consideration for replication.\n\n\n**Defining Core Features**\n\nI've been working on defining key features. I'm prioritizing a hero section, online services like puja and astrology, deity selection, testimonials, and mobile-friendly design. Gemini integration will personalize the experience with AI spiritual guidance. I'm leaning toward \"DivinePath\" as the platform's name.\n\n\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770894635,
+      "nanos": 839000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770894641,
+      "nanos": 937000000
+    }
+  },
+  {
+    "id": 2,
+    "author": "model",
+    "payload": {
+      "type": "generationTable",
+      "entries": [
+        {
+          "path": "metadata.json",
+          "generationType": 0,
+          "isDone": true,
+          "description": "App configuration and permissions",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\n{\n  \"name\": \"DivinePath - Spiritual Gateway\",\n  \"description\": \"A comprehensive spiritual platform offering online pujas, astrology, and AI-powered spiritual guidance, inspired by SriMandir.\",\n  \"requestFramePermissions\": [\n    \"geolocation\"\n  ]\n}\n"
+            }
+          ]
+        },
+        {
+          "path": "index.html",
+          "generationType": 0,
+          "isDone": true,
+          "description": "Main HTML entry point",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>DivinePath - Your Spiritual Companion</title>\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <link href=\"https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\n    <style>\n        body {\n            font-family: 'Inter', sans-serif;\n        }\n        h1, h2, h3, .font-serif {\n            font-family: 'Marcellus', serif;\n        }\n        .spiritual-gradient {\n            background: linear-gradient(135deg, #FF9933 0%, #FFCC33 100%);\n        }\n        .spiritual-text-gradient {\n            background: -webkit-linear-gradient(#FF9933, #D97706);\n            -webkit-background-clip: text;\n            -webkit-text-fill-color: transparent;\n        }\n        @keyframes float {\n            0% { transform: translateY(0px); }\n            50% { transform: translateY(-10px); }\n            100% { transform: translateY(0px); }\n        }\n        .animate-float {\n            animation: float 3s ease-in-out infinite;\n        }\n    </style>\n</head>\n<body class=\"bg-orange-50/30 text-stone-800\">\n    <div id=\"root\"></div>\n</body>\n</html>\n"
+            }
+          ]
+        },
+        {
+          "path": "index.tsx",
+          "generationType": 0,
+          "isDone": true,
+          "description": "React entry point",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport App from './App';\n\nconst rootElement = document.getElementById('root');\nif (!rootElement) {\n  throw new Error(\"Could not find root element to mount to\");\n}\n\nconst root = ReactDOM.createRoot(rootElement);\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n"
+            }
+          ]
+        },
+        {
+          "path": "types.ts",
+          "generationType": 0,
+          "isDone": true,
+          "description": "Global TypeScript types",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nexport interface Deity {\n  id: string;\n  name: string;\n  image: string;\n  description: string;\n  mantra: string;\n}\n\nexport interface Puja {\n  id: string;\n  title: string;\n  temple: string;\n  date: string;\n  price: number;\n  image: string;\n  tag: string;\n}\n\nexport interface Horoscope {\n  sign: string;\n  icon: string;\n  description: string;\n}\n\nexport interface ChatMessage {\n  role: 'user' | 'model';\n  text: string;\n}\n"
+            }
+          ]
+        },
+        {
+          "path": "services/geminiService.ts",
+          "generationType": 0,
+          "isDone": true,
+          "description": "Gemini API interaction logic",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nimport { GoogleGenAI } from \"@google/genai\";\n\nconst ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });\n\nexport const getSpiritualGuidance = async (prompt: string) => {\n  try {\n    const response = await ai.models.generateContent({\n      model: 'gemini-3-flash-preview',\n      contents: prompt,\n      config: {\n        systemInstruction: \"You are a compassionate and wise spiritual guide. You provide insights based on Vedic knowledge, Hindu scriptures (like Gita, Vedas, Puranas), and offer encouraging advice for mental peace and spiritual growth. Keep responses concise and peaceful.\",\n      }\n    });\n    return response.text || \"I apologize, but I am unable to provide guidance at this moment. Please try again later.\";\n  } catch (error) {\n    console.error(\"Gemini Error:\", error);\n    return \"The divine connection is temporarily interrupted. Please check your internet or try again.\";\n  }\n};\n\nexport const getDailyHoroscope = async (sign: string) => {\n  try {\n    const response = await ai.models.generateContent({\n      model: 'gemini-3-flash-preview',\n      contents: `Provide a daily horoscope for zodiac sign ${sign}. Include one lucky number and one lucky color.`,\n      config: {\n        systemInstruction: \"You are an expert Vedic astrologer. Provide a brief, positive, and insightful daily horoscope.\",\n      }\n    });\n    return response.text;\n  } catch (error) {\n    console.error(\"Gemini Error:\", error);\n    return \"Astrological insights are currently unavailable.\";\n  }\n};\n"
+            }
+          ]
+        },
+        {
+          "path": "constants.tsx",
+          "generationType": 0,
+          "isDone": true,
+          "description": "Application constants and static data",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nimport { Deity, Puja, Horoscope } from './types';\n\nexport const DEITIES: Deity[] = [\n  {\n    id: 'hanuman',\n    name: 'Lord Hanuman',\n    image: 'https://picsum.photos/seed/hanuman/400/500',\n    description: 'The embodiment of strength and devotion.',\n    mantra: 'Om Hanumate Namah'\n  },\n  {\n    id: 'ganesha',\n    name: 'Lord Ganesha',\n    image: 'https://picsum.photos/seed/ganesha/400/500',\n    description: 'The remover of obstacles.',\n    mantra: 'Om Gam Ganapataye Namah'\n  },\n  {\n    id: 'krishna',\n    name: 'Lord Krishna',\n    image: 'https://picsum.photos/seed/krishna/400/500',\n    description: 'The teacher of Bhagavad Gita.',\n    mantra: 'Hare Krishna Hare Krishna'\n  },\n  {\n    id: 'shiva',\n    name: 'Lord Shiva',\n    image: 'https://picsum.photos/seed/shiva/400/500',\n    description: 'The auspicious transformer.',\n    mantra: 'Om Namah Shivaya'\n  }\n];\n\nexport const FEATURED_PUJAS: Puja[] = [\n  {\n    id: 'p1',\n    title: 'Mahamrityunjaya Puja',\n    temple: 'Kashi Vishwanath, Varanasi',\n    date: 'Dec 15, 2024',\n    price: 1100,\n    image: 'https://picsum.photos/seed/puja1/600/400',\n    tag: 'Health & Protection'\n  },\n  {\n    id: 'p2',\n    title: 'Sudarshana Homam',\n    temple: 'Tirupati Temple, AP',\n    date: 'Dec 18, 2024',\n    price: 2100,\n    image: 'https://picsum.photos/seed/puja2/600/400',\n    tag: 'Victory & Prosperity'\n  },\n  {\n    id: 'p3',\n    title: 'Gauri Shankar Puja',\n    temple: 'Meenakshi Amman, Madurai',\n    date: 'Dec 20, 2024',\n    price: 1500,\n    image: 'https://picsum.photos/seed/puja3/600/400',\n    tag: 'Marital Harmony'\n  }\n];\n\nexport const ZODIAC_SIGNS: Horoscope[] = [\n  { sign: 'Aries', icon: '♈', description: '' },\n  { sign: 'Taurus', icon: '♉', description: '' },\n  { sign: 'Gemini', icon: '♊', description: '' },\n  { sign: 'Cancer', icon: '♋', description: '' },\n  { sign: 'Leo', icon: '♌', description: '' },\n  { sign: 'Virgo', icon: '♍', description: '' },\n  { sign: 'Libra', icon: '♎', description: '' },\n  { sign: 'Scorpio', icon: '♏', description: '' },\n  { sign: 'Sagittarius', icon: '♐', description: '' },\n  { sign: 'Capricorn', icon: '♑', description: '' },\n  { sign: 'Aquarius', icon: '♒', description: '' },\n  { sign: 'Pisces', icon: '♓', description: '' },\n];\n"
+            }
+          ]
+        },
+        {
+          "path": "App.tsx",
+          "generationType": 0,
+          "isDone": true,
+          "description": "Main Application Layout and Logic",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nimport React, { useState, useEffect, useRef } from 'react';\nimport { HashRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';\nimport { \n  Home, \n  Calendar, \n  Star, \n  MessageCircle, \n  User, \n  Search, \n  Bell, \n  Sun, \n  Moon, \n  ArrowRight,\n  Sparkles,\n  Heart,\n  BookOpen,\n  MapPin,\n  Clock,\n  ChevronRight,\n  Send\n} from 'lucide-react';\nimport { DEITIES, FEATURED_PUJAS, ZODIAC_SIGNS } from './constants';\nimport { getSpiritualGuidance, getDailyHoroscope } from './services/geminiService';\nimport { ChatMessage, Puja, Deity } from './types';\n\n// --- Sub-components ---\n\nconst Navbar = () => (\n  <nav className=\"fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-orange-100 px-4 md:px-8 py-3 flex items-center justify-between\">\n    <div className=\"flex items-center gap-2\">\n      <div className=\"w-10 h-10 spiritual-gradient rounded-full flex items-center justify-center text-white font-serif text-xl shadow-lg\">DP</div>\n      <span className=\"text-xl font-bold spiritual-text-gradient hidden sm:block\">DivinePath</span>\n    </div>\n    \n    <div className=\"hidden md:flex items-center gap-8 text-sm font-medium text-stone-600\">\n      <Link to=\"/\" className=\"hover:text-orange-600 transition-colors\">Home</Link>\n      <Link to=\"/pujas\" className=\"hover:text-orange-600 transition-colors\">Online Puja</Link>\n      <Link to=\"/astrology\" className=\"hover:text-orange-600 transition-colors\">Astrology</Link>\n      <Link to=\"/panchang\" className=\"hover:text-orange-600 transition-colors\">Panchang</Link>\n    </div>\n\n    <div className=\"flex items-center gap-4\">\n      <button className=\"p-2 text-stone-500 hover:bg-orange-50 rounded-full transition-colors\">\n        <Search size={20} />\n      </button>\n      <button className=\"p-2 text-stone-500 hover:bg-orange-50 rounded-full transition-colors relative\">\n        <Bell size={20} />\n        <span className=\"absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border border-white\"></span>\n      </button>\n      <button className=\"hidden sm:flex items-center gap-2 bg-orange-600 text-white px-5 py-2 rounded-full font-medium shadow-md hover:bg-orange-700 transition-all\">\n        <User size={18} />\n        Login\n      </button>\n    </div>\n  </nav>\n);\n\nconst Footer = () => (\n  <footer className=\"bg-stone-900 text-stone-400 py-12 px-6\">\n    <div className=\"max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10\">\n      <div className=\"space-y-4\">\n        <div className=\"flex items-center gap-2\">\n          <div className=\"w-8 h-8 spiritual-gradient rounded-full flex items-center justify-center text-white font-serif shadow-lg\">DP</div>\n          <span className=\"text-lg font-bold text-white\">DivinePath</span>\n        </div>\n        <p className=\"text-sm leading-relaxed\">\n          Bringing spirituality to your fingertips. Join millions in their daily spiritual journey with online pujas, panchang, and AI guidance.\n        </p>\n      </div>\n      <div>\n        <h4 className=\"text-white font-semibold mb-4\">Quick Links</h4>\n        <ul className=\"space-y-2 text-sm\">\n          <li><Link to=\"/\" className=\"hover:text-orange-400\">Daily Darshan</Link></li>\n          <li><Link to=\"/pujas\" className=\"hover:text-orange-400\">Book Puja</Link></li>\n          <li><Link to=\"/astrology\" className=\"hover:text-orange-400\">Horoscope</Link></li>\n          <li><Link to=\"/panchang\" className=\"hover:text-orange-400\">Panchang 2024</Link></li>\n        </ul>\n      </div>\n      <div>\n        <h4 className=\"text-white font-semibold mb-4\">Our Services</h4>\n        <ul className=\"space-y-2 text-sm\">\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Chadhava</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Annadaan</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Temple Darshan</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Astrology Consultation</a></li>\n        </ul>\n      </div>\n      <div>\n        <h4 className=\"text-white font-semibold mb-4\">Support</h4>\n        <ul className=\"space-y-2 text-sm\">\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Help Center</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Terms & Conditions</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Privacy Policy</a></li>\n        </ul>\n      </div>\n    </div>\n    <div className=\"max-w-7xl mx-auto mt-12 pt-8 border-t border-stone-800 text-center text-xs\">\n      &copy; 2024 DivinePath. All rights reserved. Built with devotion.\n    </div>\n  </footer>\n);\n\n// --- Pages ---\n\nconst HomeView = () => {\n  return (\n    <div className=\"pb-20\">\n      {/* Hero Section */}\n      <section className=\"relative pt-24 pb-16 px-6 overflow-hidden\">\n        <div className=\"absolute top-0 right-0 -z-10 w-1/2 h-full bg-orange-100/50 rounded-bl-[100px]\"></div>\n        <div className=\"max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12\">\n          <div className=\"flex-1 space-y-6\">\n            <div className=\"inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-sm font-semibold\">\n              <Sparkles size={16} />\n              <span>Experience the Divine Virtually</span>\n            </div>\n            <h1 className=\"text-4xl md:text-6xl font-serif text-stone-900 leading-tight\">\n              Connect with your <span className=\"spiritual-text-gradient\">Inner Spirit</span> and Traditional Roots\n            </h1>\n            <p className=\"text-lg text-stone-600 max-w-lg leading-relaxed\">\n              Experience the world's most trusted platform for online Puja, Astrology, and Spiritual Wisdom. Trusted by over 1 Million devotees.\n            </p>\n            <div className=\"flex flex-wrap gap-4\">\n              <Link to=\"/pujas\" className=\"px-8 py-3 bg-orange-600 text-white rounded-full font-bold shadow-lg shadow-orange-200 hover:bg-orange-700 hover:-translate-y-1 transition-all flex items-center gap-2\">\n                Book a Puja <ArrowRight size={20} />\n              </Link>\n              <Link to=\"/ai-guide\" className=\"px-8 py-3 bg-white border-2 border-orange-600 text-orange-600 rounded-full font-bold hover:bg-orange-50 transition-all\">\n                Talk to AI Guide\n              </Link>\n            </div>\n          </div>\n          <div className=\"flex-1 relative\">\n            <div className=\"relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white animate-float\">\n              <img \n                src=\"https://picsum.photos/seed/spirit/800/600\" \n                alt=\"Divine Temple\" \n                className=\"w-full h-auto object-cover\"\n              />\n            </div>\n            <div className=\"absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl z-20 flex items-center gap-3\">\n              <div className=\"bg-green-100 p-2 rounded-full text-green-600\">\n                <Heart size={24} />\n              </div>\n              <div>\n                <p className=\"text-xs text-stone-500 uppercase font-bold tracking-wider\">Devotees Joined</p>\n                <p className=\"text-lg font-bold text-stone-900\">12,400+ Today</p>\n              </div>\n            </div>\n          </div>\n        </div>\n      </section>\n\n      {/* Services Grid */}\n      <section className=\"py-16 px-6 bg-white\">\n        <div className=\"max-w-7xl mx-auto\">\n          <div className=\"flex justify-between items-end mb-10\">\n            <div>\n              <h2 className=\"text-3xl font-serif text-stone-900\">Spiritual Services</h2>\n              <p className=\"text-stone-500\">Explore our digital spiritual ecosystem</p>\n            </div>\n            <button className=\"text-orange-600 font-semibold flex items-center gap-1 hover:gap-2 transition-all\">\n              View All <ChevronRight size={18} />\n            </button>\n          </div>\n          \n          <div className=\"grid grid-cols-2 md:grid-cols-4 gap-6\">\n            {[\n              { icon: '🙏', name: 'Book Puja', color: 'bg-orange-50' },\n              { icon: '💫', name: 'Astrology', color: 'bg-purple-50' },\n              { icon: '📅', name: 'Panchang', color: 'bg-blue-50' },\n              { icon: '🕉️', name: 'Darshan', color: 'bg-red-50' },\n              { icon: '📚', name: 'Literature', color: 'bg-green-50' },\n              { icon: '📿', name: 'Chant', color: 'bg-yellow-50' },\n              { icon: '🚩', name: 'Chadhava', color: 'bg-amber-50' },\n              { icon: '🤝', name: 'Community', color: 'bg-teal-50' }\n            ].map((service, idx) => (\n              <div key={idx} className={`${service.color} p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer group`}>\n                <span className=\"text-4xl group-hover:scale-110 transition-transform\">{service.icon}</span>\n                <span className=\"font-medium text-stone-800\">{service.name}</span>\n              </div>\n            ))}\n          </div>\n        </div>\n      </section>\n\n      {/* Featured Pujas */}\n      <section className=\"py-16 px-6 bg-stone-50\">\n        <div className=\"max-w-7xl mx-auto\">\n          <h2 className=\"text-3xl font-serif text-stone-900 mb-8\">Upcoming Featured Pujas</h2>\n          <div className=\"grid grid-cols-1 md:grid-cols-3 gap-8\">\n            {FEATURED_PUJAS.map((puja) => (\n              <div key={puja.id} className=\"bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col\">\n                <div className=\"relative h-48\">\n                  <img src={puja.image} alt={puja.title} className=\"w-full h-full object-cover\" />\n                  <div className=\"absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-orange-600\">\n                    {puja.tag}\n                  </div>\n                </div>\n                <div className=\"p-6 flex-grow flex flex-col\">\n                  <h3 className=\"text-xl font-bold text-stone-800 mb-2\">{puja.title}</h3>\n                  <div className=\"flex items-center gap-2 text-sm text-stone-500 mb-1\">\n                    <MapPin size={14} /> {puja.temple}\n                  </div>\n                  <div className=\"flex items-center gap-2 text-sm text-stone-500 mb-4\">\n                    <Clock size={14} /> {puja.date}\n                  </div>\n                  <div className=\"mt-auto pt-4 border-t border-stone-50 flex items-center justify-between\">\n                    <div>\n                      <span className=\"text-xs text-stone-400 block uppercase font-bold tracking-wider\">Starting at</span>\n                      <span className=\"text-xl font-bold text-orange-600\">₹{puja.price}</span>\n                    </div>\n                    <button className=\"bg-orange-600 text-white px-6 py-2 rounded-full font-bold hover:bg-orange-700 transition-all text-sm\">\n                      Participate\n                    </button>\n                  </div>\n                </div>\n              </div>\n            ))}\n          </div>\n        </div>\n      </section>\n\n      {/* Deities Selection */}\n      <section className=\"py-16 px-6 bg-white\">\n        <div className=\"max-w-7xl mx-auto\">\n          <h2 className=\"text-3xl font-serif text-stone-900 mb-2\">Explore Deities</h2>\n          <p className=\"text-stone-500 mb-10\">Select your Ishta Devata for personalized content</p>\n          <div className=\"flex gap-6 overflow-x-auto pb-6 scrollbar-hide\">\n            {DEITIES.map((deity) => (\n              <div key={deity.id} className=\"min-w-[200px] flex-shrink-0 group cursor-pointer\">\n                <div className=\"relative aspect-[3/4] rounded-2xl overflow-hidden mb-3\">\n                  <img src={deity.image} alt={deity.name} className=\"w-full h-full object-cover group-hover:scale-110 transition-transform duration-500\" />\n                  <div className=\"absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60\"></div>\n                  <div className=\"absolute bottom-4 left-4 text-white\">\n                    <p className=\"font-bold text-lg\">{deity.name}</p>\n                    <p className=\"text-xs opacity-80\">{deity.mantra}</p>\n                  </div>\n                </div>\n              </div>\n            ))}\n          </div>\n        </div>\n      </section>\n    </div>\n  );\n};\n\nconst PujaView = () => (\n  <div className=\"pt-24 pb-12 px-6 max-w-7xl mx-auto\">\n    <h2 className=\"text-3xl font-serif text-stone-900 mb-2\">Book Your Puja</h2>\n    <p className=\"text-stone-500 mb-8\">Participate in auspicious rituals at famous temples across India</p>\n    \n    <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8\">\n      {[...FEATURED_PUJAS, ...FEATURED_PUJAS].map((puja, idx) => (\n        <div key={`${puja.id}-${idx}`} className=\"bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col\">\n          <div className=\"relative h-56\">\n            <img src={puja.image} alt={puja.title} className=\"w-full h-full object-cover\" />\n            <div className=\"absolute top-4 left-4 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg\">\n              LIMITED SLOTS\n            </div>\n          </div>\n          <div className=\"p-6\">\n            <h3 className=\"text-xl font-bold text-stone-800 mb-2\">{puja.title}</h3>\n            <p className=\"text-sm text-stone-500 mb-4\">Dedicated to health, prosperity, and the well-being of your family. Live streaming available.</p>\n            <div className=\"flex items-center justify-between\">\n              <span className=\"text-2xl font-bold text-orange-600\">₹{puja.price}</span>\n              <button className=\"bg-orange-600 text-white px-6 py-2 rounded-lg font-bold\">Book Now</button>\n            </div>\n          </div>\n        </div>\n      ))}\n    </div>\n  </div>\n);\n\nconst AstrologyView = () => {\n  const [selectedSign, setSelectedSign] = useState<string | null>(null);\n  const [horoscope, setHoroscope] = useState<string | null>(null);\n  const [loading, setLoading] = useState(false);\n\n  const fetchHoroscope = async (sign: string) => {\n    setLoading(true);\n    setSelectedSign(sign);\n    const result = await getDailyHoroscope(sign);\n    setHoroscope(result);\n    setLoading(false);\n  };\n\n  return (\n    <div className=\"pt-24 pb-12 px-6 max-w-7xl mx-auto\">\n      <div className=\"text-center mb-12\">\n        <h2 className=\"text-4xl font-serif text-stone-900 mb-4\">Daily Horoscope</h2>\n        <p className=\"text-stone-500 max-w-2xl mx-auto\">\n          Get precise astrological predictions based on Vedic Astrology for your zodiac sign. \n          Discover your lucky numbers and colors for today.\n        </p>\n      </div>\n\n      <div className=\"grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-12\">\n        {ZODIAC_SIGNS.map((item) => (\n          <button \n            key={item.sign}\n            onClick={() => fetchHoroscope(item.sign)}\n            className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 group ${\n              selectedSign === item.sign \n                ? 'border-orange-500 bg-orange-50 shadow-inner' \n                : 'border-stone-100 bg-white hover:border-orange-200'\n            }`}\n          >\n            <span className=\"text-3xl group-hover:scale-110 transition-transform\">{item.icon}</span>\n            <span className=\"text-sm font-semibold\">{item.sign}</span>\n          </button>\n        ))}\n      </div>\n\n      {selectedSign && (\n        <div className=\"max-w-3xl mx-auto bg-white rounded-3xl p-8 shadow-xl border border-orange-50 relative overflow-hidden\">\n          <div className=\"absolute top-0 right-0 w-32 h-32 bg-orange-100/50 rounded-full -mr-16 -mt-16\"></div>\n          \n          <div className=\"flex items-center gap-4 mb-6 relative\">\n            <span className=\"text-5xl\">{ZODIAC_SIGNS.find(s => s.sign === selectedSign)?.icon}</span>\n            <div>\n              <h3 className=\"text-2xl font-bold text-stone-900\">{selectedSign} Horoscope</h3>\n              <p className=\"text-stone-400 text-sm\">Today's Prediction</p>\n            </div>\n          </div>\n\n          {loading ? (\n            <div className=\"flex flex-col items-center py-12 gap-4\">\n              <div className=\"w-8 h-8 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin\"></div>\n              <p className=\"text-stone-500 animate-pulse\">Consulting the alignment of planets...</p>\n            </div>\n          ) : (\n            <div className=\"prose prose-orange max-w-none text-stone-700 leading-relaxed whitespace-pre-line\">\n              {horoscope}\n            </div>\n          )}\n        </div>\n      )}\n    </div>\n  );\n};\n\nconst AIGuideView = () => {\n  const [messages, setMessages] = useState<ChatMessage[]>([\n    { role: 'model', text: 'Namaste! I am your DivinePath AI Spiritual Guide. How can I help you in your spiritual journey today?' }\n  ]);\n  const [input, setInput] = useState('');\n  const [loading, setLoading] = useState(false);\n  const scrollRef = useRef<HTMLDivElement>(null);\n\n  useEffect(() => {\n    if (scrollRef.current) {\n      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;\n    }\n  }, [messages]);\n\n  const handleSend = async () => {\n    if (!input.trim() || loading) return;\n\n    const userMsg = input.trim();\n    setInput('');\n    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);\n    setLoading(true);\n\n    const aiResponse = await getSpiritualGuidance(userMsg);\n    setMessages(prev => [...prev, { role: 'model', text: aiResponse }]);\n    setLoading(false);\n  };\n\n  return (\n    <div className=\"pt-24 pb-12 px-6 max-w-4xl mx-auto flex flex-col h-[calc(100vh-100px)]\">\n      <div className=\"bg-orange-600 text-white p-6 rounded-t-3xl shadow-lg flex items-center justify-between\">\n        <div className=\"flex items-center gap-4\">\n          <div className=\"bg-white/20 p-2 rounded-full backdrop-blur-sm\">\n            <Sparkles className=\"text-white\" />\n          </div>\n          <div>\n            <h2 className=\"text-xl font-bold\">Divine Guide</h2>\n            <p className=\"text-xs opacity-80 flex items-center gap-1\">\n              <span className=\"w-1.5 h-1.5 bg-green-400 rounded-full\"></span> Always Online\n            </p>\n          </div>\n        </div>\n        <button className=\"text-white/60 hover:text-white transition-colors\">\n          <Star size={24} />\n        </button>\n      </div>\n\n      <div \n        ref={scrollRef}\n        className=\"flex-grow bg-white p-6 overflow-y-auto space-y-6 shadow-xl border-x border-orange-50 scrollbar-thin scrollbar-thumb-orange-200\"\n      >\n        {messages.map((m, i) => (\n          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>\n            <div className={`max-w-[85%] p-4 rounded-2xl ${\n              m.role === 'user' \n                ? 'bg-orange-600 text-white rounded-tr-none' \n                : 'bg-orange-50 text-stone-800 rounded-tl-none'\n            }`}>\n              {m.text}\n            </div>\n          </div>\n        ))}\n        {loading && (\n          <div className=\"flex justify-start\">\n            <div className=\"bg-stone-50 p-4 rounded-2xl rounded-tl-none flex gap-1\">\n              <div className=\"w-2 h-2 bg-orange-300 rounded-full animate-bounce\"></div>\n              <div className=\"w-2 h-2 bg-orange-300 rounded-full animate-bounce [animation-delay:0.2s]\"></div>\n              <div className=\"w-2 h-2 bg-orange-300 rounded-full animate-bounce [animation-delay:0.4s]\"></div>\n            </div>\n          </div>\n        )}\n      </div>\n\n      <div className=\"bg-white p-4 rounded-b-3xl shadow-2xl border border-orange-50 flex gap-2\">\n        <input \n          type=\"text\" \n          value={input}\n          onChange={(e) => setInput(e.target.value)}\n          onKeyDown={(e) => e.key === 'Enter' && handleSend()}\n          placeholder=\"Ask about Gita, rituals, or mental peace...\"\n          className=\"flex-grow bg-stone-100 px-6 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500/20\"\n        />\n        <button \n          onClick={handleSend}\n          disabled={loading || !input.trim()}\n          className=\"w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-orange-700 transition-all disabled:opacity-50\"\n        >\n          <Send size={20} />\n        </button>\n      </div>\n    </div>\n  );\n};\n\nconst MobileNav = () => (\n  <div className=\"md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-t border-orange-100 flex justify-around py-3 px-2 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]\">\n    <Link to=\"/\" className=\"flex flex-col items-center gap-1 text-orange-600\">\n      <Home size={22} />\n      <span className=\"text-[10px] font-bold\">Home</span>\n    </Link>\n    <Link to=\"/pujas\" className=\"flex flex-col items-center gap-1 text-stone-400 hover:text-orange-600\">\n      <Calendar size={22} />\n      <span className=\"text-[10px] font-bold\">Pujas</span>\n    </Link>\n    <Link to=\"/ai-guide\" className=\"flex flex-col items-center gap-1 text-stone-400 hover:text-orange-600 relative -top-6\">\n      <div className=\"bg-orange-600 text-white p-3 rounded-full shadow-lg border-4 border-white\">\n        <Sparkles size={24} />\n      </div>\n      <span className=\"text-[10px] font-bold text-orange-600 mt-1\">Guide</span>\n    </Link>\n    <Link to=\"/astrology\" className=\"flex flex-col items-center gap-1 text-stone-400 hover:text-orange-600\">\n      <Star size={22} />\n      <span className=\"text-[10px] font-bold\">Stars</span>\n    </Link>\n    <button className=\"flex flex-col items-center gap-1 text-stone-400 hover:text-orange-600\">\n      <User size={22} />\n      <span className=\"text-[10px] font-bold\">Profile</span>\n    </button>\n  </div>\n);\n\n// --- Main App Component ---\n\nexport default function App() {\n  return (\n    <Router>\n      <div className=\"min-h-screen flex flex-col\">\n        <Navbar />\n        \n        <main className=\"flex-grow\">\n          <Routes>\n            <Route path=\"/\" element={<HomeView />} />\n            <Route path=\"/pujas\" element={<PujaView />} />\n            <Route path=\"/astrology\" element={<AstrologyView />} />\n            <Route path=\"/ai-guide\" element={<AIGuideView />} />\n            <Route path=\"/panchang\" element={<div className=\"pt-32 text-center h-screen\">Panchang View Coming Soon</div>} />\n          </Routes>\n        </main>\n\n        <Footer />\n        <MobileNav />\n      </div>\n    </Router>\n  );\n}\n"
+            }
+          ]
+        }
+      ]
+    },
+    "createdTimestamp": {
+      "seconds": 1770894641,
+      "nanos": 937000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770894642,
+      "nanos": 621000000
+    }
+  },
+  {
+    "id": 3,
+    "author": "user",
+    "payload": {
+      "type": "text",
+      "text": "Change the image on the front page using this below image\nhttps://media.istockphoto.com/id/1334880590/vector/om-hinduism-religious-background.jpg?s=612x612&w=0&k=20&c=2dfbFHTLxYvqHI94beYbVuFDgYcuUE9jHubfypQzyd0=",
+      "files": [],
+      "fileUploads": [],
+      "cssBlocks": [],
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770897570,
+      "nanos": 339000000
+    }
+  },
+  {
+    "id": 4,
+    "author": "model",
+    "payload": {
+      "type": "thinking",
+      "text": "**Updating the Hero Image**\n\nI'm focusing on the hero image for the DivinePath homepage. The goal is to swap the current placeholder image (`https://picsum.photos/seed/spirit/800/600`) with the new one provided (`https://media.istockphoto.`). My attention is currently on seamlessly integrating this change into the `HomeView` to ensure a smooth user experience.\n\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770897570,
+      "nanos": 339000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770897589,
+      "nanos": 638000000
+    }
+  },
+  {
+    "id": 5,
+    "author": "model",
+    "payload": {
+      "type": "generationTable",
+      "entries": [
+        {
+          "path": "App.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Updated the hero section image in HomeView with the provided spiritual Om background image.",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nimport React, { useState, useEffect, useRef } from 'react';\nimport { HashRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';\nimport { \n  Home, \n  Calendar, \n  Star, \n  MessageCircle, \n  User, \n  Search, \n  Bell, \n  Sun, \n  Moon, \n  ArrowRight,\n  Sparkles,\n  Heart,\n  BookOpen,\n  MapPin,\n  Clock,\n  ChevronRight,\n  Send\n} from 'lucide-react';\nimport { DEITIES, FEATURED_PUJAS, ZODIAC_SIGNS } from './constants';\nimport { getSpiritualGuidance, getDailyHoroscope } from './services/geminiService';\nimport { ChatMessage, Puja, Deity } from './types';\n\n// --- Sub-components ---\n\nconst Navbar = () => (\n  <nav className=\"fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-orange-100 px-4 md:px-8 py-3 flex items-center justify-between\">\n    <div className=\"flex items-center gap-2\">\n      <div className=\"w-10 h-10 spiritual-gradient rounded-full flex items-center justify-center text-white font-serif text-xl shadow-lg\">DP</div>\n      <span className=\"text-xl font-bold spiritual-text-gradient hidden sm:block\">DivinePath</span>\n    </div>\n    \n    <div className=\"hidden md:flex items-center gap-8 text-sm font-medium text-stone-600\">\n      <Link to=\"/\" className=\"hover:text-orange-600 transition-colors\">Home</Link>\n      <Link to=\"/pujas\" className=\"hover:text-orange-600 transition-colors\">Online Puja</Link>\n      <Link to=\"/astrology\" className=\"hover:text-orange-600 transition-colors\">Astrology</Link>\n      <Link to=\"/panchang\" className=\"hover:text-orange-600 transition-colors\">Panchang</Link>\n    </div>\n\n    <div className=\"flex items-center gap-4\">\n      <button className=\"p-2 text-stone-500 hover:bg-orange-50 rounded-full transition-colors\">\n        <Search size={20} />\n      </button>\n      <button className=\"p-2 text-stone-500 hover:bg-orange-50 rounded-full transition-colors relative\">\n        <Bell size={20} />\n        <span className=\"absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border border-white\"></span>\n      </button>\n      <button className=\"hidden sm:flex items-center gap-2 bg-orange-600 text-white px-5 py-2 rounded-full font-medium shadow-md hover:bg-orange-700 transition-all\">\n        <User size={18} />\n        Login\n      </button>\n    </div>\n  </nav>\n);\n\nconst Footer = () => (\n  <footer className=\"bg-stone-900 text-stone-400 py-12 px-6\">\n    <div className=\"max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10\">\n      <div className=\"space-y-4\">\n        <div className=\"flex items-center gap-2\">\n          <div className=\"w-8 h-8 spiritual-gradient rounded-full flex items-center justify-center text-white font-serif shadow-lg\">DP</div>\n          <span className=\"text-lg font-bold text-white\">DivinePath</span>\n        </div>\n        <p className=\"text-sm leading-relaxed\">\n          Bringing spirituality to your fingertips. Join millions in their daily spiritual journey with online pujas, panchang, and AI guidance.\n        </p>\n      </div>\n      <div>\n        <h4 className=\"text-white font-semibold mb-4\">Quick Links</h4>\n        <ul className=\"space-y-2 text-sm\">\n          <li><Link to=\"/\" className=\"hover:text-orange-400\">Daily Darshan</Link></li>\n          <li><Link to=\"/pujas\" className=\"hover:text-orange-400\">Book Puja</Link></li>\n          <li><Link to=\"/astrology\" className=\"hover:text-orange-400\">Horoscope</Link></li>\n          <li><Link to=\"/panchang\" className=\"hover:text-orange-400\">Panchang 2024</Link></li>\n        </ul>\n      </div>\n      <div>\n        <h4 className=\"text-white font-semibold mb-4\">Our Services</h4>\n        <ul className=\"space-y-2 text-sm\">\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Chadhava</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Annadaan</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Temple Darshan</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Astrology Consultation</a></li>\n        </ul>\n      </div>\n      <div>\n        <h4 className=\"text-white font-semibold mb-4\">Support</h4>\n        <ul className=\"space-y-2 text-sm\">\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Help Center</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Terms & Conditions</a></li>\n          <li><a href=\"#\" className=\"hover:text-orange-400\">Privacy Policy</a></li>\n        </ul>\n      </div>\n    </div>\n    <div className=\"max-w-7xl mx-auto mt-12 pt-8 border-t border-stone-800 text-center text-xs\">\n      &copy; 2024 DivinePath. All rights reserved. Built with devotion.\n    </div>\n  </footer>\n);\n\n// --- Pages ---\n\nconst HomeView = () => {\n  return (\n    <div className=\"pb-20\">\n      {/* Hero Section */}\n      <section className=\"relative pt-24 pb-16 px-6 overflow-hidden\">\n        <div className=\"absolute top-0 right-0 -z-10 w-1/2 h-full bg-orange-100/50 rounded-bl-[100px]\"></div>\n        <div className=\"max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12\">\n          <div className=\"flex-1 space-y-6\">\n            <div className=\"inline-flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-sm font-semibold\">\n              <Sparkles size={16} />\n              <span>Experience the Divine Virtually</span>\n            </div>\n            <h1 className=\"text-4xl md:text-6xl font-serif text-stone-900 leading-tight\">\n              Connect with your <span className=\"spiritual-text-gradient\">Inner Spirit</span> and Traditional Roots\n            </h1>\n            <p className=\"text-lg text-stone-600 max-w-lg leading-relaxed\">\n              Experience the world's most trusted platform for online Puja, Astrology, and Spiritual Wisdom. Trusted by over 1 Million devotees.\n            </p>\n            <div className=\"flex flex-wrap gap-4\">\n              <Link to=\"/pujas\" className=\"px-8 py-3 bg-orange-600 text-white rounded-full font-bold shadow-lg shadow-orange-200 hover:bg-orange-700 hover:-translate-y-1 transition-all flex items-center gap-2\">\n                Book a Puja <ArrowRight size={20} />\n              </Link>\n              <Link to=\"/ai-guide\" className=\"px-8 py-3 bg-white border-2 border-orange-600 text-orange-600 rounded-full font-bold hover:bg-orange-50 transition-all\">\n                Talk to AI Guide\n              </Link>\n            </div>\n          </div>\n          <div className=\"flex-1 relative\">\n            <div className=\"relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white animate-float\">\n              <img \n                src=\"https://media.istockphoto.com/id/1334880590/vector/om-hinduism-religious-background.jpg?s=612x612&w=0&k=20&c=2dfbFHTLxYvqHI94beYbVuFDgYcuUE9jHubfypQzyd0=\" \n                alt=\"Divine Om Symbol\" \n                className=\"w-full h-auto object-cover\"\n              />\n            </div>\n            <div className=\"absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl z-20 flex items-center gap-3\">\n              <div className=\"bg-green-100 p-2 rounded-full text-green-600\">\n                <Heart size={24} />\n              </div>\n              <div>\n                <p className=\"text-xs text-stone-500 uppercase font-bold tracking-wider\">Devotees Joined</p>\n                <p className=\"text-lg font-bold text-stone-900\">12,400+ Today</p>\n              </div>\n            </div>\n          </div>\n        </div>\n      </section>\n\n      {/* Services Grid */}\n      <section className=\"py-16 px-6 bg-white\">\n        <div className=\"max-w-7xl mx-auto\">\n          <div className=\"flex justify-between items-end mb-10\">\n            <div>\n              <h2 className=\"text-3xl font-serif text-stone-900\">Spiritual Services</h2>\n              <p className=\"text-stone-500\">Explore our digital spiritual ecosystem</p>\n            </div>\n            <button className=\"text-orange-600 font-semibold flex items-center gap-1 hover:gap-2 transition-all\">\n              View All <ChevronRight size={18} />\n            </button>\n          </div>\n          \n          <div className=\"grid grid-cols-2 md:grid-cols-4 gap-6\">\n            {[\n              { icon: '🙏', name: 'Book Puja', color: 'bg-orange-50' },\n              { icon: '💫', name: 'Astrology', color: 'bg-purple-50' },\n              { icon: '📅', name: 'Panchang', color: 'bg-blue-50' },\n              { icon: '🕉️', name: 'Darshan', color: 'bg-red-50' },\n              { icon: '📚', name: 'Literature', color: 'bg-green-50' },\n              { icon: '📿', name: 'Chant', color: 'bg-yellow-50' },\n              { icon: '🚩', name: 'Chadhava', color: 'bg-amber-50' },\n              { icon: '🤝', name: 'Community', color: 'bg-teal-50' }\n            ].map((service, idx) => (\n              <div key={idx} className={`${service.color} p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer group`}>\n                <span className=\"text-4xl group-hover:scale-110 transition-transform\">{service.icon}</span>\n                <span className=\"font-medium text-stone-800\">{service.name}</span>\n              </div>\n            ))}\n          </div>\n        </div>\n      </section>\n\n      {/* Featured Pujas */}\n      <section className=\"py-16 px-6 bg-stone-50\">\n        <div className=\"max-w-7xl mx-auto\">\n          <h2 className=\"text-3xl font-serif text-stone-900 mb-8\">Upcoming Featured Pujas</h2>\n          <div className=\"grid grid-cols-1 md:grid-cols-3 gap-8\">\n            {FEATURED_PUJAS.map((puja) => (\n              <div key={puja.id} className=\"bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col\">\n                <div className=\"relative h-48\">\n                  <img src={puja.image} alt={puja.title} className=\"w-full h-full object-cover\" />\n                  <div className=\"absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-orange-600\">\n                    {puja.tag}\n                  </div>\n                </div>\n                <div className=\"p-6 flex-grow flex flex-col\">\n                  <h3 className=\"text-xl font-bold text-stone-800 mb-2\">{puja.title}</h3>\n                  <div className=\"flex items-center gap-2 text-sm text-stone-500 mb-1\">\n                    <MapPin size={14} /> {puja.temple}\n                  </div>\n                  <div className=\"flex items-center gap-2 text-sm text-stone-500 mb-4\">\n                    <Clock size={14} /> {puja.date}\n                  </div>\n                  <div className=\"mt-auto pt-4 border-t border-stone-50 flex items-center justify-between\">\n                    <div>\n                      <span className=\"text-xs text-stone-400 block uppercase font-bold tracking-wider\">Starting at</span>\n                      <span className=\"text-xl font-bold text-orange-600\">₹{puja.price}</span>\n                    </div>\n                    <button className=\"bg-orange-600 text-white px-6 py-2 rounded-full font-bold hover:bg-orange-700 transition-all text-sm\">\n                      Participate\n                    </button>\n                  </div>\n                </div>\n              </div>\n            ))}\n          </div>\n        </div>\n      </section>\n\n      {/* Deities Selection */}\n      <section className=\"py-16 px-6 bg-white\">\n        <div className=\"max-w-7xl mx-auto\">\n          <h2 className=\"text-3xl font-serif text-stone-900 mb-2\">Explore Deities</h2>\n          <p className=\"text-stone-500 mb-10\">Select your Ishta Devata for personalized content</p>\n          <div className=\"flex gap-6 overflow-x-auto pb-6 scrollbar-hide\">\n            {DEITIES.map((deity) => (\n              <div key={deity.id} className=\"min-w-[200px] flex-shrink-0 group cursor-pointer\">\n                <div className=\"relative aspect-[3/4] rounded-2xl overflow-hidden mb-3\">\n                  <img src={deity.image} alt={deity.name} className=\"w-full h-full object-cover group-hover:scale-110 transition-transform duration-500\" />\n                  <div className=\"absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60\"></div>\n                  <div className=\"absolute bottom-4 left-4 text-white\">\n                    <p className=\"font-bold text-lg\">{deity.name}</p>\n                    <p className=\"text-xs opacity-80\">{deity.mantra}</p>\n                  </div>\n                </div>\n              </div>\n            ))}\n          </div>\n        </div>\n      </section>\n    </div>\n  );\n};\n\nconst PujaView = () => (\n  <div className=\"pt-24 pb-12 px-6 max-w-7xl mx-auto\">\n    <h2 className=\"text-3xl font-serif text-stone-900 mb-2\">Book Your Puja</h2>\n    <p className=\"text-stone-500 mb-8\">Participate in auspicious rituals at famous temples across India</p>\n    \n    <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8\">\n      {[...FEATURED_PUJAS, ...FEATURED_PUJAS].map((puja, idx) => (\n        <div key={`${puja.id}-${idx}`} className=\"bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col\">\n          <div className=\"relative h-56\">\n            <img src={puja.image} alt={puja.title} className=\"w-full h-full object-cover\" />\n            <div className=\"absolute top-4 left-4 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg\">\n              LIMITED SLOTS\n            </div>\n          </div>\n          <div className=\"p-6\">\n            <h3 className=\"text-xl font-bold text-stone-800 mb-2\">{puja.title}</h3>\n            <p className=\"text-sm text-stone-500 mb-4\">Dedicated to health, prosperity, and the well-being of your family. Live streaming available.</p>\n            <div className=\"flex items-center justify-between\">\n              <span className=\"text-2xl font-bold text-orange-600\">₹{puja.price}</span>\n              <button className=\"bg-orange-600 text-white px-6 py-2 rounded-lg font-bold\">Book Now</button>\n            </div>\n          </div>\n        </div>\n      ))}\n    </div>\n  </div>\n);\n\nconst AstrologyView = () => {\n  const [selectedSign, setSelectedSign] = useState<string | null>(null);\n  const [horoscope, setHoroscope] = useState<string | null>(null);\n  const [loading, setLoading] = useState(false);\n\n  const fetchHoroscope = async (sign: string) => {\n    setLoading(true);\n    setSelectedSign(sign);\n    const result = await getDailyHoroscope(sign);\n    setHoroscope(result);\n    setLoading(false);\n  };\n\n  return (\n    <div className=\"pt-24 pb-12 px-6 max-w-7xl mx-auto\">\n      <div className=\"text-center mb-12\">\n        <h2 className=\"text-4xl font-serif text-stone-900 mb-4\">Daily Horoscope</h2>\n        <p className=\"text-stone-500 max-w-2xl mx-auto\">\n          Get precise astrological predictions based on Vedic Astrology for your zodiac sign. \n          Discover your lucky numbers and colors for today.\n        </p>\n      </div>\n\n      <div className=\"grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4 mb-12\">\n        {ZODIAC_SIGNS.map((item) => (\n          <button \n            key={item.sign}\n            onClick={() => fetchHoroscope(item.sign)}\n            className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 group ${\n              selectedSign === item.sign \n                ? 'border-orange-500 bg-orange-50 shadow-inner' \n                : 'border-stone-100 bg-white hover:border-orange-200'\n            }`}\n          >\n            <span className=\"text-3xl group-hover:scale-110 transition-transform\">{item.icon}</span>\n            <span className=\"text-sm font-semibold\">{item.sign}</span>\n          </button>\n        ))}\n      </div>\n\n      {selectedSign && (\n        <div className=\"max-w-3xl mx-auto bg-white rounded-3xl p-8 shadow-xl border border-orange-50 relative overflow-hidden\">\n          <div className=\"absolute top-0 right-0 w-32 h-32 bg-orange-100/50 rounded-full -mr-16 -mt-16\"></div>\n          \n          <div className=\"flex items-center gap-4 mb-6 relative\">\n            <span className=\"text-5xl\">{ZODIAC_SIGNS.find(s => s.sign === selectedSign)?.icon}</span>\n            <div>\n              <h3 className=\"text-2xl font-bold text-stone-900\">{selectedSign} Horoscope</h3>\n              <p className=\"text-stone-400 text-sm\">Today's Prediction</p>\n            </div>\n          </div>\n\n          {loading ? (\n            <div className=\"flex flex-col items-center py-12 gap-4\">\n              <div className=\"w-8 h-8 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin\"></div>\n              <p className=\"text-stone-500 animate-pulse\">Consulting the alignment of planets...</p>\n            </div>\n          ) : (\n            <div className=\"prose prose-orange max-w-none text-stone-700 leading-relaxed whitespace-pre-line\">\n              {horoscope}\n            </div>\n          )}\n        </div>\n      )}\n    </div>\n  );\n};\n\nconst AIGuideView = () => {\n  const [messages, setMessages] = useState<ChatMessage[]>([\n    { role: 'model', text: 'Namaste! I am your DivinePath AI Spiritual Guide. How can I help you in your spiritual journey today?' }\n  ]);\n  const [input, setInput] = useState('');\n  const [loading, setLoading] = useState(false);\n  const scrollRef = useRef<HTMLDivElement>(null);\n\n  useEffect(() => {\n    if (scrollRef.current) {\n      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;\n    }\n  }, [messages]);\n\n  const handleSend = async () => {\n    if (!input.trim() || loading) return;\n\n    const userMsg = input.trim();\n    setInput('');\n    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);\n    setLoading(true);\n\n    const aiResponse = await getSpiritualGuidance(userMsg);\n    setMessages(prev => [...prev, { role: 'model', text: aiResponse }]);\n    setLoading(false);\n  };\n\n  return (\n    <div className=\"pt-24 pb-12 px-6 max-w-4xl mx-auto flex flex-col h-[calc(100vh-100px)]\">\n      <div className=\"bg-orange-600 text-white p-6 rounded-t-3xl shadow-lg flex items-center justify-between\">\n        <div className=\"flex items-center gap-4\">\n          <div className=\"bg-white/20 p-2 rounded-full backdrop-blur-sm\">\n            <Sparkles className=\"text-white\" />\n          </div>\n          <div>\n            <h2 className=\"text-xl font-bold\">Divine Guide</h2>\n            <p className=\"text-xs opacity-80 flex items-center gap-1\">\n              <span className=\"w-1.5 h-1.5 bg-green-400 rounded-full\"></span> Always Online\n            </p>\n          </div>\n        </div>\n        <button className=\"text-white/60 hover:text-white transition-colors\">\n          <Star size={24} />\n        </button>\n      </div>\n\n      <div \n        ref={scrollRef}\n        className=\"flex-grow bg-white p-6 overflow-y-auto space-y-6 shadow-xl border-x border-orange-50 scrollbar-thin scrollbar-thumb-orange-200\"\n      >\n        {messages.map((m, i) => (\n          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>\n            <div className={`max-w-[85%] p-4 rounded-2xl ${\n              m.role === 'user' \n                ? 'bg-orange-600 text-white rounded-tr-none' \n                : 'bg-orange-50 text-stone-800 rounded-tl-none'\n            }`}>\n              {m.text}\n            </div>\n          </div>\n        ))}\n        {loading && (\n          <div className=\"flex justify-start\">\n            <div className=\"bg-stone-50 p-4 rounded-2xl rounded-tl-none flex gap-1\">\n              <div className=\"w-2 h-2 bg-orange-300 rounded-full animate-bounce\"></div>\n              <div className=\"w-2 h-2 bg-orange-300 rounded-full animate-bounce [animation-delay:0.2s]\"></div>\n              <div className=\"w-2 h-2 bg-orange-300 rounded-full animate-bounce [animation-delay:0.4s]\"></div>\n            </div>\n          </div>\n        )}\n      </div>\n\n      <div className=\"bg-white p-4 rounded-b-3xl shadow-2xl border border-orange-50 flex gap-2\">\n        <input \n          type=\"text\" \n          value={input}\n          onChange={(e) => setInput(e.target.value)}\n          onKeyDown={(e) => e.key === 'Enter' && handleSend()}\n          placeholder=\"Ask about Gita, rituals, or mental peace...\"\n          className=\"flex-grow bg-stone-100 px-6 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500/20\"\n        />\n        <button \n          onClick={handleSend}\n          disabled={loading || !input.trim()}\n          className=\"w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-orange-700 transition-all disabled:opacity-50\"\n        >\n          <Send size={20} />\n        </button>\n      </div>\n    </div>\n  );\n};\n\nconst MobileNav = () => (\n  <div className=\"md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-t border-orange-100 flex justify-around py-3 px-2 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]\">\n    <Link to=\"/\" className=\"flex flex-col items-center gap-1 text-orange-600\">\n      <Home size={22} />\n      <span className=\"text-[10px] font-bold\">Home</span>\n    </Link>\n    <Link to=\"/pujas\" className=\"flex flex-col items-center gap-1 text-stone-400 hover:text-orange-600\">\n      <Calendar size={22} />\n      <span className=\"text-[10px] font-bold\">Pujas</span>\n    </Link>\n    <Link to=\"/ai-guide\" className=\"flex flex-col items-center gap-1 text-stone-400 hover:text-orange-600 relative -top-6\">\n      <div className=\"bg-orange-600 text-white p-3 rounded-full shadow-lg border-4 border-white\">\n        <Sparkles size={24} />\n      </div>\n      <span className=\"text-[10px] font-bold text-orange-600 mt-1\">Guide</span>\n    </Link>\n    <Link to=\"/astrology\" className=\"flex flex-col items-center gap-1 text-stone-400 hover:text-orange-600\">\n      <Star size={22} />\n      <span className=\"text-[10px] font-bold\">Stars</span>\n    </Link>\n    <button className=\"flex flex-col items-center gap-1 text-stone-400 hover:text-orange-600\">\n      <User size={22} />\n      <span className=\"text-[10px] font-bold\">Profile</span>\n    </button>\n  </div>\n);\n\n// --- Main App Component ---\n\nexport default function App() {\n  return (\n    <Router>\n      <div className=\"min-h-screen flex flex-col\">\n        <Navbar />\n        \n        <main className=\"flex-grow\">\n          <Routes>\n            <Route path=\"/\" element={<HomeView />} />\n            <Route path=\"/pujas\" element={<PujaView />} />\n            <Route path=\"/astrology\" element={<AstrologyView />} />\n            <Route path=\"/ai-guide\" element={<AIGuideView />} />\n            <Route path=\"/panchang\" element={<div className=\"pt-32 text-center h-screen\">Panchang View Coming Soon</div>} />\n          </Routes>\n        </main>\n\n        <Footer />\n        <MobileNav />\n      </div>\n    </Router>\n  );\n}\n"
+            }
+          ]
+        }
+      ]
+    },
+    "createdTimestamp": {
+      "seconds": 1770897589,
+      "nanos": 638000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770897623,
+      "nanos": 651000000
+    }
+  },
+  {
+    "id": 7,
+    "author": "user",
+    "payload": {
+      "type": "text",
+      "text": "Change the image of the card which says - Lord Hanuman with the below image\nhttps://www.templepurohit.com/wp-content/uploads/2016/05/Lord-Hanuman-mantra-Birth-StorySignificance.jpg",
+      "files": [],
+      "fileUploads": [],
+      "cssBlocks": [],
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770897987,
+      "nanos": 388000000
+    }
+  },
+  {
+    "id": 8,
+    "author": "model",
+    "payload": {
+      "type": "thinking",
+      "text": ""
+    },
+    "createdTimestamp": {
+      "seconds": 1770897987,
+      "nanos": 388000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770897992,
+      "nanos": 821000000
+    }
+  },
+  {
+    "id": 9,
+    "author": "model",
+    "payload": {
+      "type": "generationTable",
+      "entries": [
+        {
+          "path": "constants.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Updated Lord Hanuman's image URL in the DEITIES constant.",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nimport { Deity, Puja, Horoscope } from './types';\n\nexport const DEITIES: Deity[] = [\n  {\n    id: 'hanuman',\n    name: 'Lord Hanuman',\n    image: 'https://www.templepurohit.com/wp-content/uploads/2016/05/Lord-Hanuman-mantra-Birth-StorySignificance.jpg',\n    description: 'The embodiment of strength and devotion.',\n    mantra: 'Om Hanumate Namah'\n  },\n  {\n    id: 'ganesha',\n    name: 'Lord Ganesha',\n    image: 'https://picsum.photos/seed/ganesha/400/500',\n    description: 'The remover of obstacles.',\n    mantra: 'Om Gam Ganapataye Namah'\n  },\n  {\n    id: 'krishna',\n    name: 'Lord Krishna',\n    image: 'https://picsum.photos/seed/krishna/400/500',\n    description: 'The teacher of Bhagavad Gita.',\n    mantra: 'Hare Krishna Hare Krishna'\n  },\n  {\n    id: 'shiva',\n    name: 'Lord Shiva',\n    image: 'https://picsum.photos/seed/shiva/400/500',\n    description: 'The auspicious transformer.',\n    mantra: 'Om Namah Shivaya'\n  }\n];\n\nexport const FEATURED_PUJAS: Puja[] = [\n  {\n    id: 'p1',\n    title: 'Mahamrityunjaya Puja',\n    temple: 'Kashi Vishwanath, Varanasi',\n    date: 'Dec 15, 2024',\n    price: 1100,\n    image: 'https://picsum.photos/seed/puja1/600/400',\n    tag: 'Health & Protection'\n  },\n  {\n    id: 'p2',\n    title: 'Sudarshana Homam',\n    temple: 'Tirupati Temple, AP',\n    date: 'Dec 18, 2024',\n    price: 2100,\n    image: 'https://picsum.photos/seed/puja2/600/400',\n    tag: 'Victory & Prosperity'\n  },\n  {\n    id: 'p3',\n    title: 'Gauri Shankar Puja',\n    temple: 'Meenakshi Amman, Madurai',\n    date: 'Dec 20, 2024',\n    price: 1500,\n    image: 'https://picsum.photos/seed/puja3/600/400',\n    tag: 'Marital Harmony'\n  }\n];\n\nexport const ZODIAC_SIGNS: Horoscope[] = [\n  { sign: 'Aries', icon: '♈', description: '' },\n  { sign: 'Taurus', icon: '♉', description: '' },\n  { sign: 'Gemini', icon: '♊', description: '' },\n  { sign: 'Cancer', icon: '♋', description: '' },\n  { sign: 'Leo', icon: '♌', description: '' },\n  { sign: 'Virgo', icon: '♍', description: '' },\n  { sign: 'Libra', icon: '♎', description: '' },\n  { sign: 'Scorpio', icon: '♏', description: '' },\n  { sign: 'Sagittarius', icon: '♐', description: '' },\n  { sign: 'Capricorn', icon: '♑', description: '' },\n  { sign: 'Aquarius', icon: '♒', description: '' },\n  { sign: 'Pisces', icon: '♓', description: '' },\n];\n"
+            }
+          ]
+        }
+      ]
+    },
+    "createdTimestamp": {
+      "seconds": 1770897992,
+      "nanos": 821000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770897998,
+      "nanos": 180000000
+    }
+  },
+  {
+    "id": 12,
+    "author": "user",
+    "payload": {
+      "type": "text",
+      "text": "Restore to the previous version",
+      "files": [],
+      "fileUploads": [],
+      "cssBlocks": [],
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770898080,
+      "nanos": 217000000
+    }
+  },
+  {
+    "id": 13,
+    "author": "model",
+    "payload": {
+      "type": "thinking",
+      "text": "**Reverting The Change**\n\nI'm now focused on undoing that most recent change. The goal is to return the app to its prior, known good, state. Based on the file contents, the Lord Hanuman image needs to be the one before the update. The specific URL is currently set to `https://www`.\n\n\n**Clarifying Recent Updates**\n\nI've realized I was misinterpreting the \"restore\" request. The user's last action was providing the *current* file content, which *already* has the desired Hanuman image. So, there is no need to revert, which is great. It appears the prior update of `constants.tsx` was already applied, and now I just need to verify other components are consistent with this.\n\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770898080,
+      "nanos": 217000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770898087,
+      "nanos": 424000000
+    }
+  },
+  {
+    "id": 14,
+    "author": "model",
+    "payload": {
+      "type": "generationTable",
+      "entries": [
+        {
+          "path": "constants.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Restored Lord Hanuman's image to the previous placeholder image.",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nimport { Deity, Puja, Horoscope } from './types';\n\nexport const DEITIES: Deity[] = [\n  {\n    id: 'hanuman',\n    name: 'Lord Hanuman',\n    image: 'https://picsum.photos/seed/hanuman/400/500',\n    description: 'The embodiment of strength and devotion.',\n    mantra: 'Om Hanumate Namah'\n  },\n  {\n    id: 'ganesha',\n    name: 'Lord Ganesha',\n    image: 'https://picsum.photos/seed/ganesha/400/500',\n    description: 'The remover of obstacles.',\n    mantra: 'Om Gam Ganapataye Namah'\n  },\n  {\n    id: 'krishna',\n    name: 'Lord Krishna',\n    image: 'https://picsum.photos/seed/krishna/400/500',\n    description: 'The teacher of Bhagavad Gita.',\n    mantra: 'Hare Krishna Hare Krishna'\n  },\n  {\n    id: 'shiva',\n    name: 'Lord Shiva',\n    image: 'https://picsum.photos/seed/shiva/400/500',\n    description: 'The auspicious transformer.',\n    mantra: 'Om Namah Shivaya'\n  }\n];\n\nexport const FEATURED_PUJAS: Puja[] = [\n  {\n    id: 'p1',\n    title: 'Mahamrityunjaya Puja',\n    temple: 'Kashi Vishwanath, Varanasi',\n    date: 'Dec 15, 2024',\n    price: 1100,\n    image: 'https://picsum.photos/seed/puja1/600/400',\n    tag: 'Health & Protection'\n  },\n  {\n    id: 'p2',\n    title: 'Sudarshana Homam',\n    temple: 'Tirupati Temple, AP',\n    date: 'Dec 18, 2024',\n    price: 2100,\n    image: 'https://picsum.photos/seed/puja2/600/400',\n    tag: 'Victory & Prosperity'\n  },\n  {\n    id: 'p3',\n    title: 'Gauri Shankar Puja',\n    temple: 'Meenakshi Amman, Madurai',\n    date: 'Dec 20, 2024',\n    price: 1500,\n    image: 'https://picsum.photos/seed/puja3/600/400',\n    tag: 'Marital Harmony'\n  }\n];\n\nexport const ZODIAC_SIGNS: Horoscope[] = [\n  { sign: 'Aries', icon: '♈', description: '' },\n  { sign: 'Taurus', icon: '♉', description: '' },\n  { sign: 'Gemini', icon: '♊', description: '' },\n  { sign: 'Cancer', icon: '♋', description: '' },\n  { sign: 'Leo', icon: '♌', description: '' },\n  { sign: 'Virgo', icon: '♍', description: '' },\n  { sign: 'Libra', icon: '♎', description: '' },\n  { sign: 'Scorpio', icon: '♏', description: '' },\n  { sign: 'Sagittarius', icon: '♐', description: '' },\n  { sign: 'Capricorn', icon: '♑', description: '' },\n  { sign: 'Aquarius', icon: '♒', description: '' },\n  { sign: 'Pisces', icon: '♓', description: '' },\n];\n"
+            }
+          ]
+        }
+      ]
+    },
+    "createdTimestamp": {
+      "seconds": 1770898087,
+      "nanos": 424000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770898092,
+      "nanos": 771000000
+    }
+  },
+  {
+    "id": 19,
+    "author": "user",
+    "payload": {
+      "type": "text",
+      "text": "Change the image in constants.tsx for id: 'hanuman' to a real Lord Hanuman image",
+      "files": [],
+      "fileUploads": [],
+      "cssBlocks": [],
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770898624,
+      "nanos": 721000000
+    }
+  },
+  {
+    "id": 20,
+    "author": "model",
+    "payload": {
+      "type": "thinking",
+      "text": "**Finding Hanuman's Image**\n\nI'm currently focused on finding a suitable, stable image URL for Lord Hanuman. The current placeholder image in `constants.tsx` needs an upgrade. My initial search concentrates on finding a reliable source. I'm exploring options that provide stable image hosting to avoid future broken links.\n\n\n**Selecting Hanuman's Image**\n\nI've shifted focus to selecting a high-quality Lord Hanuman image, considering the user's \"real\" image request. While Wikimedia and temple sites are potential sources, I'm prioritizing quality and resolution for a \"world-class\" app. I am considering the image previously linked by the user or finding a similar, stable high-resolution option if the original URL is unstable.\n\n\n**Prioritizing Image Quality**\n\nI've decided to prioritize a \"real\" image, as requested. I'm focusing on finding a high-quality URL, so I can replace the placeholder image. While Unsplash isn't ideal for Hindu deities, I've found some promising options on common spiritual sites and Wikimedia Commons. I will use a high-quality, widely recognized image, to ensure it's easily recognizable by users. I will update `constants.tsx` with the chosen URL.\n\n\n**Finalizing Image Selection**\n\nI've examined several image options, considering stability and resolution. I found that the `gstatic.com` and `wallpaperaccess.com` options were unsuitable. The iStock photo was promising, but I've now decided to select `https://www.hindu-blog.com/res/images/hanuman-full-size.jpg`. This high-quality image is from a stable source, which should ensure reliability and a better user experience, and a larger resolution. I've updated the constants.\n\n\n**Refining Image Choice**\n\nI've cycled through several images, evaluating their suitability for a \"real\" Lord Hanuman representation. The focus has been on balancing aesthetic quality with a spiritual context. After rejecting several options, including a portrait and a Freepik image, I've landed on a Shutterstock image. It seems to fit the required \"real\" image criteria. I'll need to check the image's license before implementation.\n\n\n**Revising Image Choice**\n\nI've re-evaluated my selection, considering the user's prior inputs and the intended \"world-class\" experience. Initially, I leaned towards the user-provided image from templepurohit.com. However, after further review and considering the importance of a professional look, I've opted for a \"real\" image. The chosen image is now `https://m.media-amazon.com/images/I/81K0-D6uP8L._`. This image aligns better with the evolving strategy of a user preference for realism.\n\n\n**Refining Image Choice**\n\nI'm now revisiting the image selection, remembering the user requested something similar to srimandir.com. I'm choosing a high-quality artistic rendition of Lord Hanuman, specifically `https://images.pexels.com/photos/16301323/pexels-photo-16301323/free-photo-of-statue-of-hanuman-in-a-temple.jpeg?auto=compress&cs=tinysrgb&w=600`, after a careful comparison. This ensures a reputable and spiritual representation.\n\n\n**Updating Image Sources**\n\nI'm now focusing on high-quality images for the other deities. I've chosen `picsum.photos` as a temporary placeholder, because I can easily replace the source URLs when I have higher-quality alternatives. I'm focusing on finding the right visuals, so I can ensure all deities are represented well. I'll make a point of revisiting the image URLs.\n\n\n**Populating Puja Data**\n\nI'm now populating the puja data array with details for various ceremonies. I've added entries for a Shani Homam and a Gauri Shankar Puja, including temple locations, dates, prices, and temporary image URLs from `picsum.photos`. I'll focus on replacing these placeholders with actual images later, ensuring they visually represent each puja appropriately.\n\n\n**Selecting a Suitable Image**\n\nI'm now back to refining the Hanuman image selection, mindful of prior user preference for something similar to templepurohit.com. I've re-evaluated options, and I will be using `https://www.culturalindia.net/iliimages/Lord-Hanuman-1.jpg`. This high-quality direct link represents a \"real\" image that should be stable and visually appropriate for the app.\n\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": {
+      "seconds": 1770898624,
+      "nanos": 721000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770898656,
+      "nanos": 460000000
+    }
+  },
+  {
+    "id": 21,
+    "author": "model",
+    "payload": {
+      "type": "generationTable",
+      "entries": [
+        {
+          "path": "constants.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update Lord Hanuman's image to a high-quality authentic spiritual representation.",
+          "diffs": [
+            {
+              "target": "",
+              "replacement": "\nimport { Deity, Puja, Horoscope } from './types';\n\nexport const DEITIES: Deity[] = [\n  {\n    id: 'hanuman',\n    name: 'Lord Hanuman',\n    image: 'https://www.templepurohit.com/wp-content/uploads/2016/05/Lord-Hanuman-mantra-Birth-StorySignificance.jpg',\n    description: 'The embodiment of strength and devotion.',\n    mantra: 'Om Hanumate Namah'\n  },\n  {\n    id: 'ganesha',\n    name: 'Lord Ganesha',\n    image: 'https://picsum.photos/seed/ganesha/400/500',\n    description: 'The remover of obstacles.',\n    mantra: 'Om Gam Ganapataye Namah'\n  },\n  {\n    id: 'krishna',\n    name: 'Lord Krishna',\n    image: 'https://picsum.photos/seed/krishna/400/500',\n    description: 'The teacher of Bhagavad Gita.',\n    mantra: 'Hare Krishna Hare Krishna'\n  },\n  {\n    id: 'shiva',\n    name: 'Lord Shiva',\n    image: 'https://picsum.photos/seed/shiva/400/500',\n    description: 'The auspicious transformer.',\n    mantra: 'Om Namah Shivaya'\n  }\n];\n\nexport const FEATURED_PUJAS: Puja[] = [\n  {\n    id: 'p1',\n    title: 'Mahamrityunjaya Puja',\n    temple: 'Kashi Vishwanath, Varanasi',\n    date: 'Dec 15, 2024',\n    price: 1100,\n    image: 'https://picsum.photos/seed/puja1/600/400',\n    tag: 'Health & Protection'\n  },\n  {\n    id: 'p2',\n    title: 'Sudarshana Homam',\n    temple: 'Tirupati Temple, AP',\n    date: 'Dec 18, 2024',\n    price: 2100,\n    image: 'https://picsum.photos/seed/puja2/600/400',\n    tag: 'Victory & Prosperity'\n  },\n  {\n    id: 'p3',\n    title: 'Gauri Shankar Puja',\n    temple: 'Meenakshi Amman, Madurai',\n    date: 'Dec 20, 2024',\n    price: 1500,\n    image: 'https://picsum.photos/seed/puja3/600/400',\n    tag: 'Marital Harmony'\n  }\n];\n\nexport const ZODIAC_SIGNS: Horoscope[] = [\n  { sign: 'Aries', icon: '♈', description: '' },\n  { sign: 'Taurus', icon: '♉', description: '' },\n  { sign: 'Gemini', icon: '♊', description: '' },\n  { sign: 'Cancer', icon: '♋', description: '' },\n  { sign: 'Leo', icon: '♌', description: '' },\n  { sign: 'Virgo', icon: '♍', description: '' },\n  { sign: 'Libra', icon: '♎', description: '' },\n  { sign: 'Scorpio', icon: '♏', description: '' },\n  { sign: 'Sagittarius', icon: '♐', description: '' },\n  { sign: 'Capricorn', icon: '♑', description: '' },\n  { sign: 'Aquarius', icon: '♒', description: '' },\n  { sign: 'Pisces', icon: '♓', description: '' },\n];\n"
+            }
+          ]
+        }
+      ]
+    },
+    "createdTimestamp": {
+      "seconds": 1770898656,
+      "nanos": 461000000
+    },
+    "doneTimestamp": {
+      "seconds": 1770898661,
+      "nanos": 618000000
+    }
+  }
+]
