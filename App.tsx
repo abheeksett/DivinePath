@@ -18,8 +18,11 @@ import {
   MapPin,
   Clock,
   ChevronRight,
-  Send
+  Send,
+  RefreshCw,
+  Download
 } from 'lucide-react';
+import { GoogleGenAI } from "@google/genai";
 import { DEITIES, FEATURED_PUJAS, ZODIAC_SIGNS } from './constants';
 import { getSpiritualGuidance, getDailyHoroscope } from './services/geminiService';
 import { ChatMessage, Puja, Deity } from './types';
@@ -136,7 +139,6 @@ const HomeView = () => {
                 src="https://media.istockphoto.com/id/1334880590/vector/om-hinduism-religious-background.jpg?s=612x612&w=0&k=20&c=2dfbFHTLxYvqHI94beYbVuFDgYcuUE9jHubfypQzyd0=" 
                 alt="Divine Om Symbol" 
                 className="w-full h-auto object-cover"
-                referrerPolicy="no-referrer"
               />
             </div>
             <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl z-20 flex items-center gap-3">
@@ -193,7 +195,7 @@ const HomeView = () => {
             {FEATURED_PUJAS.map((puja) => (
               <div key={puja.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col">
                 <div className="relative h-48">
-                  <img src={puja.image} alt={puja.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={puja.image} alt={puja.title} className="w-full h-full object-cover" />
                   <div className="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-orange-600">
                     {puja.tag}
                   </div>
@@ -230,8 +232,8 @@ const HomeView = () => {
           <div className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide">
             {DEITIES.map((deity) => (
               <div key={deity.id} className="min-w-[200px] flex-shrink-0 group cursor-pointer">
-                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3">
-                  <img src={deity.image} alt={deity.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" />
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-3">
+                  <img src={deity.image} alt={deity.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60"></div>
                   <div className="absolute bottom-4 left-4 text-white">
                     <p className="font-bold text-lg">{deity.name}</p>
@@ -256,7 +258,7 @@ const PujaView = () => (
       {[...FEATURED_PUJAS, ...FEATURED_PUJAS].map((puja, idx) => (
         <div key={`${puja.id}-${idx}`} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col">
           <div className="relative h-56">
-            <img src={puja.image} alt={puja.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <img src={puja.image} alt={puja.title} className="w-full h-full object-cover" />
             <div className="absolute top-4 left-4 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
               LIMITED SLOTS
             </div>
@@ -463,6 +465,88 @@ const MobileNav = () => (
   </div>
 );
 
+const ImageGenerator = () => {
+  const [prompt, setPrompt] = useState('A high-quality, spiritually powerful image of Lord Shiva for Mahamrityunjaya Puja. Lord Shiva is in deep meditation, surrounded by a divine aura and cosmic energy. The atmosphere is serene and sacred, with soft light illuminating the scene. The image should convey peace, protection, and transcendence. Cinematic lighting, 4k resolution, highly detailed.');
+  const [image, setImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const generateImage = async () => {
+    setLoading(true);
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+      const response = await ai.models.generateContent({
+        model: 'gemini-3.1-flash-image-preview',
+        contents: {
+          parts: [{ text: prompt }],
+        },
+        config: {
+          imageConfig: {
+            aspectRatio: "16:9",
+            imageSize: "1K"
+          },
+        },
+      });
+
+      for (const part of response.candidates[0].content.parts) {
+        if (part.inlineData) {
+          setImage(`data:image/png;base64,${part.inlineData.data}`);
+          break;
+        }
+      }
+    } catch (error) {
+      console.error("Error generating image:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="pt-24 pb-12 px-6 max-w-4xl mx-auto">
+      <h2 className="text-3xl font-serif text-stone-900 mb-6">Divine Image Generator</h2>
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-100 mb-8">
+        <textarea 
+          className="w-full p-4 border border-stone-200 rounded-xl mb-4 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+          rows={4}
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Describe the divine image..."
+        />
+        <button 
+          onClick={generateImage}
+          disabled={loading}
+          className="bg-orange-600 text-white px-8 py-3 rounded-full font-bold hover:bg-orange-700 transition-all flex items-center gap-2 disabled:opacity-50"
+        >
+          {loading ? <RefreshCw className="animate-spin" size={20} /> : <Sparkles size={20} />}
+          {loading ? 'Generating...' : 'Generate Divine Image'}
+        </button>
+      </div>
+
+      {image && (
+        <div className="space-y-4">
+          <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+            <img src={image} alt="Generated Divine" className="w-full h-auto" />
+          </div>
+          <div className="bg-orange-50 p-4 rounded-xl border border-orange-100">
+            <p className="text-sm text-orange-800 font-medium mb-2">Image Generated Successfully!</p>
+            <p className="text-xs text-orange-600 break-all overflow-hidden h-20">
+              {image}
+            </p>
+            <button 
+              onClick={() => {
+                navigator.clipboard.writeText(image);
+                alert("Image Data URI copied to clipboard!");
+              }}
+              className="mt-3 text-xs bg-orange-200 text-orange-800 px-3 py-1 rounded-full font-bold hover:bg-orange-300 transition-all"
+            >
+              Copy Data URI
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // --- Main App Component ---
 
 export default function App() {
@@ -477,6 +561,7 @@ export default function App() {
             <Route path="/pujas" element={<PujaView />} />
             <Route path="/astrology" element={<AstrologyView />} />
             <Route path="/ai-guide" element={<AIGuideView />} />
+            <Route path="/dev/gen" element={<ImageGenerator />} />
             <Route path="/panchang" element={<div className="pt-32 text-center h-screen">Panchang View Coming Soon</div>} />
           </Routes>
         </main>
