@@ -136,6 +136,7 @@ const HomeView = () => {
                 src="https://media.istockphoto.com/id/1334880590/vector/om-hinduism-religious-background.jpg?s=612x612&w=0&k=20&c=2dfbFHTLxYvqHI94beYbVuFDgYcuUE9jHubfypQzyd0=" 
                 alt="Divine Om Symbol" 
                 className="w-full h-auto object-cover"
+                referrerPolicy="no-referrer"
               />
             </div>
             <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl z-20 flex items-center gap-3">
@@ -192,7 +193,7 @@ const HomeView = () => {
             {FEATURED_PUJAS.map((puja) => (
               <div key={puja.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col">
                 <div className="relative h-48">
-                  <img src={puja.image} alt={puja.title} className="w-full h-full object-cover" />
+                  <img src={puja.image} alt={puja.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   <div className="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-orange-600">
                     {puja.tag}
                   </div>
@@ -230,7 +231,7 @@ const HomeView = () => {
             {DEITIES.map((deity) => (
               <div key={deity.id} className="min-w-[200px] flex-shrink-0 group cursor-pointer">
                 <div className="relative aspect-[3/4] rounded-2xl overflow-hidden mb-3">
-                  <img src={deity.image} alt={deity.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <img src={deity.image} alt={deity.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60"></div>
                   <div className="absolute bottom-4 left-4 text-white">
                     <p className="font-bold text-lg">{deity.name}</p>
@@ -255,7 +256,7 @@ const PujaView = () => (
       {[...FEATURED_PUJAS, ...FEATURED_PUJAS].map((puja, idx) => (
         <div key={`${puja.id}-${idx}`} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-stone-100 flex flex-col">
           <div className="relative h-56">
-            <img src={puja.image} alt={puja.title} className="w-full h-full object-cover" />
+            <img src={puja.image} alt={puja.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             <div className="absolute top-4 left-4 bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
               LIMITED SLOTS
             </div>

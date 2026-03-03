@@ -39,7 +39,7 @@ export const FEATURED_PUJAS: Puja[] = [
     temple: 'Kashi Vishwanath, Varanasi',
     date: 'Dec 15, 2024',
     price: 1100,
-    image: 'https://picsum.photos/seed/lord-shiva/600/400',
+    image: 'https://images.unsplash.com/photo-1630406144797-821be1f35d65?auto=format&fit=crop&q=80&w=600&h=400',
     tag: 'Health & Protection'
   },
   {
